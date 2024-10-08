@@ -118,38 +118,63 @@ def check_defender_atp_enrollment(device_name):
     except requests.RequestException as e:
         return f"Defender ATP: An error occurred: {str(e)}"
 
-def display_menu():
-    print("\nMenu:")
+def display_main_menu():
+    print("\nMain Menu:")
+    print("1. Launch URL scan utility")
+    print("2. Launch Defender query utility")
+    print("3. Launch network scanner utility")
+    print("4. Exit")
+
+def display_url_scan_menu():
+    print("\nURL Scan Menu:")
     print("1. Check with VirusTotal")
     print("2. Check with urlscan.io")
     print("3. Check with Cisco Talos")
-    print("4. Check Defender ATP enrollment")
-    print("5. Exit")
+    print("4. Return to main menu")
 
 def main():
-    url = input("Enter the URL you want to check: ")
-    
     while True:
-        display_menu()
-        choice = input("Enter your choice (1-5): ")
+        display_main_menu()
+        choice = input("Enter your choice (1-4): ")
 
         if choice == '1':
-            result = check_virustotal(url)
+            url = input("Enter the URL you want to check: ")
+            while True:
+                display_url_scan_menu()
+                scan_choice = input("Enter your choice (1-4): ")
+                
+                if scan_choice == '1':
+                    result = check_virustotal(url)
+                elif scan_choice == '2':
+                    result = check_urlscan(url)
+                elif scan_choice == '3':
+                    result = check_cisco_talos(url)
+                elif scan_choice == '4':
+                    break
+                else:
+                    result = "Invalid choice. Please select 1-4."
+
+                print("\nResult:")
+                print(result)
+
         elif choice == '2':
-            result = check_urlscan(url)
-        elif choice == '3':
-            result = check_cisco_talos(url)
-        elif choice == '4':
+            print("Launching Defender query utility...")
+            # Add Defender query utility function call here
             device_name = input("Enter the device name to check Defender ATP enrollment: ")
             result = check_defender_atp_enrollment(device_name)
-        elif choice == '5':
+            print("\nResult:")
+            print(result)
+
+        elif choice == '3':
+            print("Launching network scanner utility...")
+            # Add network scanner utility function call here
+
+        elif choice == '4':
             print("Exiting...")
             break
         else:
-            result = "Invalid choice. Please select 1-5."
-
-        print("\nResult:")
-        print(result)
+            print("Invalid choice. Please select 1-4.")
 
 if __name__ == "__main__":
     main()
+
